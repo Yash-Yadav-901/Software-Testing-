@@ -40,16 +40,7 @@ boolean buttonPresent = driver.findElement(By.xpath("//button/i")).isDisplayed()
 return userNameVisible && passInputVisible && buttonPresent;
 }
 
-@Test
-public void correctUserPass(){
-driver.get("https://the-internet.herokuapp.com/login");
 
-boolean pre_check = preCheck(driver);
-Assert.assertTrue(pre_check, " Precheck check failed");
-
-// check if can login with correct username and password
-
-}
 
 @Test
 public void wrongUserCorrPass(){
@@ -62,15 +53,28 @@ Assert.assertTrue(pre_check, " Precheck check failed");
 
 }
 
-@Test
-public void CorrUserWrongPass(){
+@Test(groups = "corrUserPass")
+public void correctUserPass(){
+String user_name = "tomsmith";
+String password = "SuperSecretPassword";
 driver.get("https://the-internet.herokuapp.com/login");
 
 boolean pre_check = preCheck(driver);
 Assert.assertTrue(pre_check, " Precheck check failed");
 
 // check if can login with correct username and password
+WebElement user = driver.findElement(By.id("username"));
+WebElement pass = driver.findElement(By.id("password"));
 
+user.sendKeys(user_name);
+pass.sendKeys(password);
+
+// click on button
+driver.findElement(By.className("radius")).click();
+
+String flash_msg = driver.findElement(By.id("flash")).getText();
+Assert.assertTrue(flash_msg.contains("You logged into a secure area!"));
+driver.quit();
 }
 
 @Test
