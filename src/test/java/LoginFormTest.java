@@ -4,6 +4,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.*;
 import org.testng.Assert;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 
 
@@ -96,6 +98,41 @@ boolean pre_check = preCheck(driver);
 Assert.assertTrue(pre_check, " Precheck check failed");
 
 // check if can login with correct username and password
+
+}
+
+@Test(groups = "AddRemove")
+public void AddRemoveEle(){
+driver.get("https://the-internet.herokuapp.com/add_remove_elements/");
+
+// verify if the page loaded
+String text = driver.findElement(By.tagName("h3")).getText();
+Assert.assertEquals(text, "Add/Remove Elements", "Page noe loaded yet");
+
+WebElement button = driver.findElement(By.xpath("//button[text()=\"Add Element\"]"));
+boolean isPre = button.isDisplayed();
+Assert.assertTrue(isPre,"Button is not present");
+
+// click the button five time
+for(int i=0; i<5; i++){
+button.click();
+}
+
+// Verify Delete button count is 5 also
+List<WebElement> deleteBtn = driver.findElements(By.className("added-manually"));
+int count_DeleBtn = deleteBtn.size();
+assert count_DeleBtn == 5;
+
+for(int i=0; i<3; i++){
+deleteBtn.get(i).click();
+}
+
+// Delete count button = 2
+deleteBtn = driver.findElements(By.className("added-manually"));
+count_DeleBtn = deleteBtn.size();
+assert count_DeleBtn == 2;
+
+}
 
 }
 }
